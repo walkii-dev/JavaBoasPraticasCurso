@@ -41,17 +41,9 @@ public class AdocaoController {
     @PutMapping("/aprovar")
     @Transactional
     public ResponseEntity<String> aprovar(@RequestBody @Valid Adocao adocao) {
-        adocao.setStatus(StatusAdocao.APROVADO);
-        repository.save(adocao);
-
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom("adopet@email.com.br");
-        email.setTo(adocao.getTutor().getEmail());
-        email.setSubject("Adoção aprovada");
-        email.setText("Parabéns " +adocao.getTutor().getNome() +"!\n\nSua adoção do pet " +adocao.getPet().getNome() +", solicitada em " +adocao.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) +", foi aprovada.\nFavor entrar em contato com o abrigo " +adocao.getPet().getAbrigo().getNome() +" para agendar a busca do seu pet.");
-        emailSender.send(email);
-
-        return ResponseEntity.ok().build();
+        this.service.aprovar(adocao);
+        // não coloquei o try-catch pois esse metodo nao esta lancando nenhum erro no momento.
+        return ResponseEntity.ok("Adoção aprovada com sucesso.");
     }
 
     @PutMapping("/reprovar")
