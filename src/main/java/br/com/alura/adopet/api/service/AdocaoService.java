@@ -54,15 +54,7 @@ public class AdocaoService {
                     throw new ValidacaoException("Pet já está aguardando avaliação para ser adotado!");
                 }
             }
-            for (Adocao a : adocoes) {
-                int contador = 0;
-                if (a.getTutor() == tutor && a.getStatus() == StatusAdocao.APROVADO) {
-                    contador = contador + 1;
-                }
-                if (contador == 5) {
-                    throw new ValidacaoException("Tutor chegou ao limite máximo de 5 adoções!");
-                }
-            }
+
         }
         Adocao adocao = new Adocao();
         adocao.setPet(pet);
