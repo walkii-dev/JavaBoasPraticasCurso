@@ -15,21 +15,18 @@ import java.util.List;
 public class ValidarSeTutorAguardaOutraAvaliacao implements AdocaoValidavel{
 
     private final AdocaoRepository adocaoRepository;
-    private final TutorRepository tutorRepository;
 
-    public ValidarSeTutorAguardaOutraAvaliacao (AdocaoRepository adocaoRepository,
-                                                TutorRepository tutorRepository){
+    public ValidarSeTutorAguardaOutraAvaliacao(AdocaoRepository adocaoRepository){
         this.adocaoRepository = adocaoRepository;
-        this.tutorRepository = tutorRepository;
     }
 
     public void validar(SolicitacaoAdocaoDTO dto){
-        List<Adocao> adocoes = adocaoRepository.findAll();
-        Tutor tutor = tutorRepository.getReferenceById(dto.idTutor());
-        for (Adocao a : adocoes) {
-            if (a.getTutor() == tutor && a.getStatus() == StatusAdocao.AGUARDANDO_AVALIACAO) {
+        boolean tutorAguardaOutraAvaliacao = adocaoRepository
+                .existsByTutorIdAndStatus(dto.idTutor(),
+                        StatusAdocao.AGUARDANDO_AVALIACAO);
+
+            if (tutorAguardaOutraAvaliacao) {
                 throw new ValidacaoException("Tutor já possui outra adoção aguardando avaliação!");
             }
-        }
     }
 }
