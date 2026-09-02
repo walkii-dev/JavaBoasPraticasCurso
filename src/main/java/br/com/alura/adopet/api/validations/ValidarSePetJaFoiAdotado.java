@@ -7,7 +7,7 @@ import br.com.alura.adopet.api.repository.PetRepository;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidarSePetJaFoiAdotado {
+public class ValidarSePetJaFoiAdotado implements AdocaoValidavel{
 
     private final PetRepository petRepository;
 

@@ -11,6 +11,7 @@ import br.com.alura.adopet.api.model.Tutor;
 import br.com.alura.adopet.api.repository.AdocaoRepository;
 import br.com.alura.adopet.api.repository.PetRepository;
 import br.com.alura.adopet.api.repository.TutorRepository;
+import br.com.alura.adopet.api.validations.AdocaoValidavel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,15 +25,18 @@ public class AdocaoService {
     private final EmailService emailService;
     private final PetRepository petRepository;
     private final TutorRepository tutorRepository;
+    private final List<AdocaoValidavel> validators;
 
     public AdocaoService(AdocaoRepository repository,
                          EmailService emailService,
                          PetRepository petRepository,
-                         TutorRepository tutorRepository) {
+                         TutorRepository tutorRepository,
+                         List<AdocaoValidavel> validators) {
         this.repository = repository;
         this.emailService = emailService;
         this.tutorRepository = tutorRepository;
         this.petRepository = petRepository;
+        this.validators = validators;
     }
 
     public void solicitar(SolicitacaoAdocaoDTO dto) {
@@ -40,11 +44,8 @@ public class AdocaoService {
         Pet pet = petRepository.getReferenceById(dto.idPet());
         Tutor tutor = tutorRepository.getReferenceById(dto.idTutor());
 
-         else {
+        validators.forEach(v -> v.validar(dto));
 
-
-
-        }
         Adocao adocao = new Adocao();
         adocao.setPet(pet);
         adocao.setTutor(tutor);

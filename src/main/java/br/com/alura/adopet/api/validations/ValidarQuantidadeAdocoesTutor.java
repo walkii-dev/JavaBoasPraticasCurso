@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ValidarQuantidadeAdocoesTutor {
+public class ValidarQuantidadeAdocoesTutor implements AdocaoValidavel{
 
     private final AdocaoRepository adocaoRepository;
     private final TutorRepository tutorRepository;

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ValidarSePetAguardaOutraAvaliacao {
+public class ValidarSePetAguardaOutraAvaliacao implements AdocaoValidavel{
     private final AdocaoRepository adocaoRepository;
     private final PetRepository petRepository;
 
