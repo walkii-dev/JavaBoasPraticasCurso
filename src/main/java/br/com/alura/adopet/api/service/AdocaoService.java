@@ -49,11 +49,7 @@ public class AdocaoService {
                     throw new ValidacaoException("Tutor já possui outra adoção aguardando avaliação!");
                 }
             }
-            for (Adocao a : adocoes) {
-                if (a.getPet() == pet && a.getStatus() == StatusAdocao.AGUARDANDO_AVALIACAO) {
-                    throw new ValidacaoException("Pet já está aguardando avaliação para ser adotado!");
-                }
-            }
+
 
         }
         Adocao adocao = new Adocao();
