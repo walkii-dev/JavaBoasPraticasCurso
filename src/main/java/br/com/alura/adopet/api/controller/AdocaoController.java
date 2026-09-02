@@ -1,5 +1,6 @@
 package br.com.alura.adopet.api.controller;
 
+import br.com.alura.adopet.api.dto.AprovarAdocaoDTO;
 import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Adocao;
@@ -41,8 +42,8 @@ public class AdocaoController {
 
     @PutMapping("/aprovar")
     @Transactional
-    public ResponseEntity<String> aprovar(@RequestBody @Valid Adocao adocao) {
-        this.service.aprovar(adocao);
+    public ResponseEntity<String> aprovar(@RequestBody @Valid AprovarAdocaoDTO dto) {
+        this.service.aprovar(dto);
         // não coloquei o try-catch pois esse metodo nao esta lancando nenhum erro no momento.
         return ResponseEntity.ok("Adoção aprovada com sucesso.");
     }
