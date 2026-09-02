@@ -1,6 +1,7 @@
 package br.com.alura.adopet.api.controller;
 
 import br.com.alura.adopet.api.dto.AprovarAdocaoDTO;
+import br.com.alura.adopet.api.dto.ReprovarAdocaoDTO;
 import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Adocao;
@@ -50,8 +51,8 @@ public class AdocaoController {
 
     @PutMapping("/reprovar")
     @Transactional
-    public ResponseEntity<String> reprovar(@RequestBody @Valid Adocao adocao) {
-        this.service.reprovar(adocao);
+    public ResponseEntity<String> reprovar(@RequestBody @Valid ReprovarAdocaoDTO dto) {
+        this.service.reprovar(dto);
         return ResponseEntity.ok("Adoção reprovada com sucesso.");
     }
 

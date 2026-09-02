@@ -1,6 +1,7 @@
 package br.com.alura.adopet.api.service;
 
 import br.com.alura.adopet.api.dto.AprovarAdocaoDTO;
+import br.com.alura.adopet.api.dto.ReprovarAdocaoDTO;
 import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Adocao;
@@ -88,9 +89,11 @@ public class AdocaoService {
                 "Parabéns " +adocao.getTutor().getNome() +"!\n\nSua adoção do pet " +adocao.getPet().getNome() +", solicitada em " +adocao.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) +", foi aprovada.\nFavor entrar em contato com o abrigo " +adocao.getPet().getAbrigo().getNome() +" para agendar a busca do seu pet.");
     }
 
-    public void reprovar(Adocao adocao) {
+    public void reprovar(ReprovarAdocaoDTO dto) {
+        Adocao adocao = repository.getReferenceById(dto.idAdocao());
+
         adocao.setStatus(StatusAdocao.REPROVADO);
-        repository.save(adocao);
+        adocao.setJustificativaStatus(dto.justificativaRecusa());
 
         this.emailService.disparar(adocao.getTutor().getEmail(),
                 "Adoção reprovada",
