@@ -14,22 +14,18 @@ import java.util.List;
 @Component
 public class ValidarSePetAguardaOutraAvaliacao implements AdocaoValidavel{
     private final AdocaoRepository adocaoRepository;
-    private final PetRepository petRepository;
 
-    public ValidarSePetAguardaOutraAvaliacao (AdocaoRepository adocaoRepository,
-                                              PetRepository petRepository){
+    public ValidarSePetAguardaOutraAvaliacao(AdocaoRepository adocaoRepository){
         this.adocaoRepository = adocaoRepository;
-        this.petRepository = petRepository;
     }
 
     public void validar(SolicitacaoAdocaoDTO dto){
+        boolean petAguardaOutraAvaliacao = adocaoRepository
+                .existsByPetIdAndStatus(dto.idPet(),
+                        StatusAdocao.AGUARDANDO_AVALIACAO);
 
-        List<Adocao> adocoes = adocaoRepository.findAll();
-        Pet pet = petRepository.getReferenceById(dto.idPet());
-        for (Adocao a : adocoes) {
-            if (a.getPet() == pet && a.getStatus() == StatusAdocao.AGUARDANDO_AVALIACAO) {
+            if (petAguardaOutraAvaliacao) {
                 throw new ValidacaoException("Pet já está aguardando avaliação para ser adotado!");
             }
-        }
     }
 }
