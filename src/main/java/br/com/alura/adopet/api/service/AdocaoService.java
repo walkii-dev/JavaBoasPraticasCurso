@@ -3,10 +3,8 @@ package br.com.alura.adopet.api.service;
 import br.com.alura.adopet.api.dto.AprovarAdocaoDTO;
 import br.com.alura.adopet.api.dto.ReprovarAdocaoDTO;
 import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDTO;
-import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Adocao;
 import br.com.alura.adopet.api.model.Pet;
-import br.com.alura.adopet.api.model.StatusAdocao;
 import br.com.alura.adopet.api.model.Tutor;
 import br.com.alura.adopet.api.repository.AdocaoRepository;
 import br.com.alura.adopet.api.repository.PetRepository;
@@ -14,7 +12,6 @@ import br.com.alura.adopet.api.repository.TutorRepository;
 import br.com.alura.adopet.api.validations.AdocaoValidavel;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -46,12 +43,7 @@ public class AdocaoService {
 
         validators.forEach(v -> v.validar(dto));
 
-        Adocao adocao = new Adocao();
-        adocao.setPet(pet);
-        adocao.setTutor(tutor);
-        adocao.setMotivo(dto.motivoAdocao());
-        adocao.setData(LocalDateTime.now());
-        adocao.setStatus(StatusAdocao.AGUARDANDO_AVALIACAO);
+        Adocao adocao = new Adocao(pet,tutor, dto.motivoAdocao());
 
         repository.save(adocao);
 
@@ -64,7 +56,7 @@ public class AdocaoService {
 
         Adocao adocao = repository.getReferenceById(dto.idAdocao());
 
-        adocao.setStatus(StatusAdocao.APROVADO);
+        adocao.aprovar();
 
         this.emailService.disparar(adocao.getTutor().getEmail(),
                 "Adoção aprovada",
@@ -74,8 +66,7 @@ public class AdocaoService {
     public void reprovar(ReprovarAdocaoDTO dto) {
         Adocao adocao = repository.getReferenceById(dto.idAdocao());
 
-        adocao.setStatus(StatusAdocao.REPROVADO);
-        adocao.setJustificativaStatus(dto.justificativaRecusa());
+        adocao.reprovar(dto.justificativaRecusa());
 
         this.emailService.disparar(adocao.getTutor().getEmail(),
                 "Adoção reprovada",
