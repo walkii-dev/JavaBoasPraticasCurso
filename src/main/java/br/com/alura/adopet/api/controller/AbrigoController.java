@@ -1,8 +1,11 @@
 package br.com.alura.adopet.api.controller;
 
+import br.com.alura.adopet.api.dto.CadastroAbrigoDTO;
+import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
 import br.com.alura.adopet.api.model.Pet;
 import br.com.alura.adopet.api.repository.AbrigoRepository;
+import br.com.alura.adopet.api.service.AbrigoService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +19,11 @@ import java.util.List;
 @RequestMapping("/abrigos")
 public class AbrigoController {
 
-    @Autowired
-    private AbrigoRepository repository;
+    private final AbrigoService abrigoService;
+
+    public AbrigoController (AbrigoService abrigoService){
+        this.abrigoService = abrigoService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Abrigo>> listar() {
@@ -26,16 +32,12 @@ public class AbrigoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> cadastrar(@RequestBody @Valid Abrigo abrigo) {
-        boolean nomeJaCadastrado = repository.existsByNome(abrigo.getNome());
-        boolean telefoneJaCadastrado = repository.existsByTelefone(abrigo.getTelefone());
-        boolean emailJaCadastrado = repository.existsByEmail(abrigo.getEmail());
-
-        if (nomeJaCadastrado || telefoneJaCadastrado || emailJaCadastrado) {
-            return ResponseEntity.badRequest().body("Dados já cadastrados para outro abrigo!");
-        } else {
-            repository.save(abrigo);
-            return ResponseEntity.ok().build();
+    public ResponseEntity<String> cadastrar(@RequestBody @Valid CadastroAbrigoDTO dto) {
+        try {
+            this.abrigoService.cadastrar(dto);
+            return ResponseEntity.ok().body("Abrigo criado com sucesso!");
+        } catch (ValidacaoException exc){
+            return ResponseEntity.badRequest().body(exc.getMessage());
         }
     }
 

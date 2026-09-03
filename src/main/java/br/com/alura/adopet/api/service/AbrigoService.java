@@ -1,8 +1,10 @@
 package br.com.alura.adopet.api.service;
 
+import br.com.alura.adopet.api.dto.CadastroAbrigoDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
 import br.com.alura.adopet.api.repository.AbrigoRepository;
+import org.springframework.http.ResponseEntity;
 
 
 public class AbrigoService {
@@ -13,7 +15,13 @@ public class AbrigoService {
         this.repository = repository;
     }
 
-    public void cadastrar(Abrigo abrigo){
+    public void listar(){
+        repository.findAll();
+    }
+
+    public void cadastrar(CadastroAbrigoDTO dto){
+
+
         boolean nomeJaCadastrado = repository.existsByNome(abrigo.getNome());
         boolean telefoneJaCadastrado = repository.existsByTelefone(abrigo.getTelefone());
         boolean emailJaCadastrado = repository.existsByEmail(abrigo.getEmail());
