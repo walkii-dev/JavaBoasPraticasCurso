@@ -86,10 +86,8 @@ public class AbrigoService {
         try {
             Long id = Long.parseLong(idOuNome);
             Abrigo abrigo = repository.getReferenceById(id);
-
             Pet pet = new Pet(dto);
-
-            pet.setAbrigo(abrigo);
+            pet.definirAbrigoDoPet(abrigo);
             abrigo.getPets().add(pet);
 
         } catch (EntityNotFoundException enfe) {
@@ -98,7 +96,7 @@ public class AbrigoService {
             try {
                 Abrigo abrigo = repository.findByNome(idOuNome);
                 Pet pet = new Pet(dto);
-                pet.setAbrigo(abrigo);
+                pet.definirAbrigoDoPet(abrigo);
                 abrigo.getPets().add(pet);
                 repository.save(abrigo);
             } catch (EntityNotFoundException enfe) {
