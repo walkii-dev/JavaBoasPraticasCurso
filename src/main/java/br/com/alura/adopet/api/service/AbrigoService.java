@@ -5,10 +5,8 @@ import br.com.alura.adopet.api.dto.DadosListagemAbrigoDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
 import br.com.alura.adopet.api.repository.AbrigoRepository;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-
 
 public class AbrigoService {
 
@@ -30,14 +28,14 @@ public class AbrigoService {
 
     public void cadastrar(CadastroAbrigoDTO dto){
 
-
-        boolean nomeJaCadastrado = repository.existsByNome(abrigo.getNome());
-        boolean telefoneJaCadastrado = repository.existsByTelefone(abrigo.getTelefone());
-        boolean emailJaCadastrado = repository.existsByEmail(abrigo.getEmail());
+        boolean nomeJaCadastrado = repository.existsByNome(dto.nome());
+        boolean telefoneJaCadastrado = repository.existsByTelefone(dto.telefone());
+        boolean emailJaCadastrado = repository.existsByEmail(dto.email());
 
         if (nomeJaCadastrado || telefoneJaCadastrado || emailJaCadastrado) {
             throw new ValidacaoException("Dados já cadastrados para outro abrigo!");
         } else {
+            Abrigo abrigo = new Abrigo(dto.nome(), dto.telefone(), dto.email());
             repository.save(abrigo);
         }
     }
