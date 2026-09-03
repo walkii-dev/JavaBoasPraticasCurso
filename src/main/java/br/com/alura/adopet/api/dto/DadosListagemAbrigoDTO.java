@@ -1,4 +1,9 @@
 package br.com.alura.adopet.api.dto;
 
-public record DadosListagemAbrigoDTO(String nome, String telefone, String email) {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record DadosListagemAbrigoDTO(@NotBlank String nome,
+                                     @NotBlank String telefone,
+                                     @NotBlank @Email String email) {
 }
