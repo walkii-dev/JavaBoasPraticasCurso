@@ -1,6 +1,7 @@
 package br.com.alura.adopet.api.model;
 
 import br.com.alura.adopet.api.dto.DadosCadastroTutorDTO;
+import br.com.alura.adopet.api.dto.DadosTutorDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -37,6 +38,13 @@ public class Tutor {
     public Tutor(){}
 
     public Tutor(DadosCadastroTutorDTO dto){
+        this.nome = dto.nome();
+        this.telefone = dto.telefone();
+        this.email = dto.email();
+        this.adocoes = new ArrayList<>();
+    }
+
+    public Tutor(DadosTutorDTO dto){
         this.nome = dto.nome();
         this.telefone = dto.telefone();
         this.email = dto.email();

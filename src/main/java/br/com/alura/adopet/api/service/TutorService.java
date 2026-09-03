@@ -1,10 +1,10 @@
 package br.com.alura.adopet.api.service;
 
 import br.com.alura.adopet.api.dto.DadosCadastroTutorDTO;
+import br.com.alura.adopet.api.dto.DadosTutorDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Tutor;
 import br.com.alura.adopet.api.repository.TutorRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,5 +26,10 @@ public class TutorService {
         } else {
             tutorRepository.save(tutor);
         }
+    }
+
+    public void atualizarDadosTutor(DadosTutorDTO dto){
+        Tutor tutor = new Tutor(dto);
+        tutorRepository.save(tutor);
     }
 }
