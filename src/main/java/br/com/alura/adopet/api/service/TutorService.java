@@ -16,7 +16,6 @@ public class TutorService {
     }
 
     public void cadastrarTutor(DadosCadastroTutorDTO dto){
-
         Tutor tutor = new Tutor(dto);
 
         boolean telefoneJaCadastrado = tutorRepository.existsByTelefone(tutor.getTelefone());

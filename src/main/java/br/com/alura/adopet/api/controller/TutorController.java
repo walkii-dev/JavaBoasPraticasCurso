@@ -1,7 +1,10 @@
 package br.com.alura.adopet.api.controller;
 
+import br.com.alura.adopet.api.dto.DadosCadastroTutorDTO;
+import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Tutor;
 import br.com.alura.adopet.api.repository.TutorRepository;
+import br.com.alura.adopet.api.service.TutorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +15,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tutores")
 public class TutorController {
 
-    @Autowired
-    private TutorRepository repository;
+    private final TutorService tutorService;
+    public TutorController(TutorService tutorService){
+        this.tutorService = tutorService;
+    }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> cadastrar(@RequestBody @Valid Tutor tutor) {
-
+    public ResponseEntity<String> cadastrar(@RequestBody @Valid DadosCadastroTutorDTO dto) {
+        try {
+            this.tutorService.cadastrarTutor(dto);
+            return ResponseEntity.ok().body("Tutor cadastrado com suceso!");
+        } catch(ValidacaoException ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PutMapping

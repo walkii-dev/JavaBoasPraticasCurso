@@ -1,11 +1,13 @@
 package br.com.alura.adopet.api.model;
 
+import br.com.alura.adopet.api.dto.DadosCadastroTutorDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,16 +20,12 @@ public class Tutor {
     @Column(name = "id")
     private Long id;
 
-
     @Column(name = "nome")
     private String nome;
-
 
     @Pattern(regexp = "\\(?\\d{2}\\)?\\d?\\d{4}-?\\d{4}")
     @Column(name = "telefone")
     private String telefone;
-
-
 
     @Column(name = "email")
     private String email;
@@ -35,6 +33,15 @@ public class Tutor {
     @OneToMany(mappedBy = "tutor", fetch = FetchType.EAGER)
     @JsonManagedReference("tutor_adocoes")
     private List<Adocao> adocoes;
+
+    public Tutor(){}
+
+    public Tutor(DadosCadastroTutorDTO dto){
+        this.nome = dto.nome();
+        this.telefone = dto.telefone();
+        this.email = dto.email();
+        this.adocoes = new ArrayList<>();
+    }
 
     @Override
     public boolean equals(Object o) {
