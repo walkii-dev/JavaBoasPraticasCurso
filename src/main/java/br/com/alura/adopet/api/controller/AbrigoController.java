@@ -1,6 +1,7 @@
 package br.com.alura.adopet.api.controller;
 
 import br.com.alura.adopet.api.dto.CadastroAbrigoDTO;
+import br.com.alura.adopet.api.dto.DadosListagemAbrigoDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
 import br.com.alura.adopet.api.model.Pet;
@@ -26,8 +27,8 @@ public class AbrigoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Abrigo>> listar() {
-        return ResponseEntity.ok(repository.findAll());
+    public ResponseEntity<List<DadosListagemAbrigoDTO>> listar() {
+        return ResponseEntity.ok(this.abrigoService.listar());
     }
 
     @PostMapping
