@@ -4,13 +4,9 @@ import br.com.alura.adopet.api.dto.CadastroAbrigoDTO;
 import br.com.alura.adopet.api.dto.DadosListagemAbrigoDTO;
 import br.com.alura.adopet.api.dto.DadosPetDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
-import br.com.alura.adopet.api.model.Abrigo;
-import br.com.alura.adopet.api.model.Pet;
-import br.com.alura.adopet.api.repository.AbrigoRepository;
 import br.com.alura.adopet.api.service.AbrigoService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -54,9 +50,13 @@ public class AbrigoController {
 
     @PostMapping("/{idOuNome}/pets")
     @Transactional
-    public ResponseEntity<String> cadastrarPet(@PathVariable String idOuNome, @RequestBody @Valid DadosPetDTO dto) {
-        this.abrigoService.cadastrarPet(idOuNome,dto);
-        return ResponseEntity.ok().body("Pet cadastrado com sucesso no Abrigo!");
+    public ResponseEntity<String> cadastrarPetNoAbrigo(@PathVariable String idOuNome, @RequestBody @Valid DadosPetDTO dto) {
+        try {
+            this.abrigoService.cadastrarPetNoAbrigo(idOuNome, dto);
+            return ResponseEntity.ok().body("Pet cadastrado com sucesso no Abrigo!");
+        } catch (EntityNotFoundException ex){
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

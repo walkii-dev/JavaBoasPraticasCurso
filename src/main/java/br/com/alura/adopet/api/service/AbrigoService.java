@@ -5,9 +5,10 @@ import br.com.alura.adopet.api.dto.DadosListagemAbrigoDTO;
 import br.com.alura.adopet.api.dto.DadosPetDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
+import br.com.alura.adopet.api.model.Pet;
 import br.com.alura.adopet.api.repository.AbrigoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 
@@ -50,7 +51,13 @@ public class AbrigoService {
                     .getReferenceById(id)
                     .getPets()
                     .stream()
-                    .map(pet -> new DadosPetDTO())
+                    .map(pet -> new DadosPetDTO(
+                            pet.getTipo().name(),
+                            pet.getNome(),
+                            pet.getRaca(),
+                            pet.getIdade(),
+                            pet.getCor(),
+                            pet.getPeso()))
                     .toList();
         } catch (EntityNotFoundException enfe) {
             throw new EntityNotFoundException("Id do abrigo não encontrado!");
@@ -60,7 +67,14 @@ public class AbrigoService {
                         .findByNome(idOuNome)
                         .getPets()
                         .stream()
-                        .map(pet -> new DadosPetDTO())
+                        .map(pet -> new DadosPetDTO(
+                                pet.getTipo().name(),
+                                pet.getNome(),
+                                pet.getRaca(),
+                                pet.getIdade(),
+                                pet.getCor(),
+                                pet.getPeso()
+                        ))
                         .toList();
             } catch (EntityNotFoundException enfe) {
                 throw new EntityNotFoundException("Nome do abrigo não encontrado!");
@@ -68,27 +82,27 @@ public class AbrigoService {
         }
     }
 
-    public void cadastrarPet(String idOuNome, DadosPetDTO dto){
+    public void cadastrarPetNoAbrigo(String idOuNome, DadosPetDTO dto){
         try {
             Long id = Long.parseLong(idOuNome);
             Abrigo abrigo = repository.getReferenceById(id);
+
+            Pet pet = new Pet(dto);
+
             pet.setAbrigo(abrigo);
-            pet.setAdotado(false);
             abrigo.getPets().add(pet);
-            repository.save(abrigo);
-            return ResponseEntity.ok().build();
+
         } catch (EntityNotFoundException enfe) {
-            return ResponseEntity.notFound().build();
+            throw new EntityNotFoundException("Id do Abrigo Não encontrado!");
         } catch (NumberFormatException nfe) {
             try {
                 Abrigo abrigo = repository.findByNome(idOuNome);
+                Pet pet = new Pet(dto);
                 pet.setAbrigo(abrigo);
-                pet.setAdotado(false);
                 abrigo.getPets().add(pet);
                 repository.save(abrigo);
-                return ResponseEntity.ok().build();
             } catch (EntityNotFoundException enfe) {
-                return ResponseEntity.notFound().build();
+                throw new EntityNotFoundException("Nome do Abrigo Não encontrado!");
             }
         }
     }
