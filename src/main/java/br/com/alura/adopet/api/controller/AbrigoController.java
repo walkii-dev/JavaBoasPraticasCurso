@@ -2,6 +2,7 @@ package br.com.alura.adopet.api.controller;
 
 import br.com.alura.adopet.api.dto.CadastroAbrigoDTO;
 import br.com.alura.adopet.api.dto.DadosListagemAbrigoDTO;
+import br.com.alura.adopet.api.dto.DadosPetDTO;
 import br.com.alura.adopet.api.exception.ValidacaoException;
 import br.com.alura.adopet.api.model.Abrigo;
 import br.com.alura.adopet.api.model.Pet;
@@ -21,7 +22,6 @@ import java.util.List;
 public class AbrigoController {
 
     private final AbrigoService abrigoService;
-
     public AbrigoController (AbrigoService abrigoService){
         this.abrigoService = abrigoService;
     }
@@ -43,20 +43,12 @@ public class AbrigoController {
     }
 
     @GetMapping("/{idOuNome}/pets")
-    public ResponseEntity<List<Pet>> listarPets(@PathVariable String idOuNome) {
+    public ResponseEntity<List<DadosPetDTO>> listarPets(@PathVariable String idOuNome) {
         try {
-            Long id = Long.parseLong(idOuNome);
-            List<Pet> pets = repository.getReferenceById(id).getPets();
-            return ResponseEntity.ok(pets);
-        } catch (EntityNotFoundException enfe) {
+            return ResponseEntity.ok()
+                    .body(this.abrigoService.listarPets(idOuNome));
+        } catch (EntityNotFoundException ex){
             return ResponseEntity.notFound().build();
-        } catch (NumberFormatException e) {
-            try {
-                List<Pet> pets = repository.findByNome(idOuNome).getPets();
-                return ResponseEntity.ok(pets);
-            } catch (EntityNotFoundException enfe) {
-                return ResponseEntity.notFound().build();
-            }
         }
     }
 
